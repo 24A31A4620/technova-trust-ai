@@ -1,0 +1,6 @@
+{
+  "name": "TechNova TrustLayer AI",
+  "description": "FS-2605 Injection-Resistant Financial Assistant with Verifiable Privacy & Deterministic Action Firewall",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

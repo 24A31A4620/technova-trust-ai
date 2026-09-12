@@ -1,0 +1,193 @@
+{
+  "entities": {
+    "users": {
+      "title": "User",
+      "description": "User profile with role and authentication provider metadata",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "role": { "type": "string" },
+        "authProvider": { "type": "string" },
+        "accountStatus": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "lastLoginAt": { "type": "string" }
+      },
+      "required": ["uid", "email"]
+    },
+    "simulatorAccounts": {
+      "title": "SimulatorAccount",
+      "description": "Financial simulator account holding simulated treasury balances",
+      "type": "object",
+      "properties": {
+        "accountId": { "type": "string" },
+        "userId": { "type": "string" },
+        "accountName": { "type": "string" },
+        "currency": { "type": "string" },
+        "balance": { "type": "number" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["accountId", "userId", "balance"]
+    },
+    "beneficiaries": {
+      "title": "Beneficiary",
+      "description": "Verified or unverified payment recipient entity",
+      "type": "object",
+      "properties": {
+        "beneficiaryId": { "type": "string" },
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "status": { "type": "string" },
+        "riskLevel": { "type": "string" },
+        "accountReference": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["beneficiaryId", "userId", "name"]
+    },
+    "transactions": {
+      "title": "Transaction",
+      "description": "Financial transaction with original intent, AI proposal, and firewall decision",
+      "type": "object",
+      "properties": {
+        "transactionId": { "type": "string" },
+        "userId": { "type": "string" },
+        "originalIntent": { "type": "object" },
+        "aiProposal": { "type": "object" },
+        "trustResult": { "type": "object" },
+        "provenance": { "type": "array" },
+        "intentBinding": { "type": "object" },
+        "risk": { "type": "object" },
+        "policyResult": { "type": "object" },
+        "firewallDecision": { "type": "object" },
+        "status": { "type": "string" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" },
+        "executedAt": { "type": "string" }
+      },
+      "required": ["transactionId", "userId", "status"]
+    },
+    "documents": {
+      "title": "Document",
+      "description": "Uploaded external financial documents, permanently partitioned as UNTRUSTED",
+      "type": "object",
+      "properties": {
+        "documentId": { "type": "string" },
+        "userId": { "type": "string" },
+        "fileName": { "type": "string" },
+        "documentType": { "type": "string" },
+        "sourceType": { "type": "string" },
+        "trustLevel": { "type": "string" },
+        "storagePath": { "type": "string" },
+        "extractedText": { "type": "string" },
+        "injectionDetected": { "type": "boolean" },
+        "injectionIndicators": { "type": "array" },
+        "extractedFinancialFields": { "type": "object" },
+        "uploadedAt": { "type": "string" }
+      },
+      "required": ["documentId", "userId", "trustLevel"]
+    },
+    "provenance": {
+      "title": "ProvenanceRecord",
+      "description": "Detailed trace of each financial field origin and trust classification",
+      "type": "object",
+      "properties": {
+        "provenanceId": { "type": "string" },
+        "userId": { "type": "string" },
+        "transactionId": { "type": "string" },
+        "field": { "type": "string" },
+        "value": { "type": "string" },
+        "source": { "type": "string" },
+        "sourceType": { "type": "string" },
+        "trustLevel": { "type": "string" },
+        "documentId": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["provenanceId", "userId", "trustLevel"]
+    },
+    "attackResults": {
+      "title": "AttackResult",
+      "description": "Telemetry and defense metrics from adversarial test executions",
+      "type": "object",
+      "properties": {
+        "attackId": { "type": "string" },
+        "userId": { "type": "string" },
+        "attackType": { "type": "string" },
+        "input": { "type": "string" },
+        "maliciousContent": { "type": "string" },
+        "aiProposal": { "type": "object" },
+        "trustResult": { "type": "object" },
+        "provenance": { "type": "object" },
+        "intentBinding": { "type": "object" },
+        "riskScore": { "type": "number" },
+        "riskLevel": { "type": "string" },
+        "policyResult": { "type": "object" },
+        "firewallDecision": { "type": "string" },
+        "result": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["attackId", "userId", "attackType"]
+    },
+    "auditLogs": {
+      "title": "AuditLog",
+      "description": "Cryptographically linked SHA-256 tamper-evident transaction log",
+      "type": "object",
+      "properties": {
+        "auditId": { "type": "string" },
+        "userId": { "type": "string" },
+        "transactionId": { "type": "string" },
+        "timestamp": { "type": "string" },
+        "eventType": { "type": "string" },
+        "originalIntent": { "type": "object" },
+        "aiProposal": { "type": "object" },
+        "trustResult": { "type": "object" },
+        "provenance": { "type": "object" },
+        "intentBinding": { "type": "object" },
+        "riskResult": { "type": "object" },
+        "policyResult": { "type": "object" },
+        "firewallDecision": { "type": "object" },
+        "previousHash": { "type": "string" },
+        "currentHash": { "type": "string" },
+        "integrityStatus": { "type": "string" }
+      },
+      "required": ["auditId", "userId", "currentHash"]
+    },
+    "privacyProofs": {
+      "title": "PrivacyProof",
+      "description": "Prototype zero-exposure solvency commitment and predicate proof",
+      "type": "object",
+      "properties": {
+        "proofId": { "type": "string" },
+        "userId": { "type": "string" },
+        "predicate": { "type": "string" },
+        "threshold": { "type": "number" },
+        "commitment": { "type": "string" },
+        "proof": { "type": "string" },
+        "verificationResult": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["proofId", "userId", "commitment"]
+    },
+    "systemMetrics": {
+      "title": "SystemMetrics",
+      "description": "Aggregated defense telemetry and decision latency counters",
+      "type": "object",
+      "properties": {
+        "metricId": { "type": "string" },
+        "userId": { "type": "string" },
+        "transactionsProcessed": { "type": "number" },
+        "transactionsAllowed": { "type": "number" },
+        "transactionsBlocked": { "type": "number" },
+        "transactionsEscalated": { "type": "number" },
+        "attacksTested": { "type": "number" },
+        "attacksBlocked": { "type": "number" },
+        "promptInjectionsDetected": { "type": "number" },
+        "averageDecisionLatency": { "type": "number" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["metricId", "userId"]
+    }
+  }
+}

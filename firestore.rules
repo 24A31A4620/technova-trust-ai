@@ -1,0 +1,101 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isDocOwner() {
+      return isAuthenticated() && (
+        resource.data.userId == request.auth.uid ||
+        resource.data.userId == 'global_demo'
+      );
+    }
+
+    // 1. User Profiles
+    match /users/{uid} {
+      allow read: if isAuthenticated() && (request.auth.uid == uid || resource.data.uid == request.auth.uid);
+      allow create: if isAuthenticated() && (request.auth.uid == uid || request.resource.data.uid == request.auth.uid);
+      allow update: if isAuthenticated() && (request.auth.uid == uid || resource.data.uid == request.auth.uid);
+      allow delete: if false;
+    }
+
+    // 2. Financial Simulator Accounts
+    match /simulatorAccounts/{accountId} {
+      allow read: if isDocOwner();
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update: if isDocOwner();
+      allow delete: if isDocOwner();
+    }
+
+    // 3. Beneficiaries
+    match /beneficiaries/{beneficiaryId} {
+      allow read: if isDocOwner();
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update: if isDocOwner();
+      allow delete: if isDocOwner();
+    }
+
+    // 4. Transactions
+    match /transactions/{transactionId} {
+      allow read: if isDocOwner();
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update: if isDocOwner();
+      allow delete: if false;
+    }
+
+    // 5. External Documents (Always isolated, UNTRUSTED)
+    match /documents/{documentId} {
+      allow read: if isDocOwner();
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update: if isDocOwner();
+      allow delete: if isDocOwner();
+    }
+
+    // 6. Provenance Records
+    match /provenance/{provenanceId} {
+      allow read: if isDocOwner();
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update: if isDocOwner();
+      allow delete: if false;
+    }
+
+    // 7. Attack Lab Results
+    match /attackResults/{attackId} {
+      allow read: if isDocOwner();
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update: if isDocOwner();
+      allow delete: if false;
+    }
+
+    // 8. Audit Logs (Tamper-Evident SHA-256 Ledger - Append Only)
+    match /auditLogs/{auditId} {
+      allow read: if isDocOwner();
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update: if false; // Immutable append-only chain
+      allow delete: if false;
+    }
+
+    // 9. Privacy Proofs
+    match /privacyProofs/{proofId} {
+      allow read: if isDocOwner();
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update: if isDocOwner();
+      allow delete: if false;
+    }
+
+    // 10. System Metrics
+    match /systemMetrics/{metricId} {
+      allow read: if isDocOwner();
+      allow create: if isAuthenticated() && request.resource.data.userId == request.auth.uid;
+      allow update: if isDocOwner();
+      allow delete: if false;
+    }
+  }
+}
